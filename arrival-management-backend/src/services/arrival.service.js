@@ -37,6 +37,12 @@ class ArrivalService {
 
         return newArrival;
     }
+    static async getAllArrivals() {
+        return await Arrival.findAll({
+            include: [{ model: Supplier, attributes: ['name'] }],
+            order: [['expected_arrival_date', 'ASC']]
+        });
+    }
     static async getUpcomingArrivals() {
         return await Arrival.findAll({
             where: { status: 'upcoming' },

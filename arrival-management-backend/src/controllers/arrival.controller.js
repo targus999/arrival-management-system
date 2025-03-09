@@ -22,6 +22,15 @@ class ArrivalController {
         }
     }
 
+    static async getAllArrivals(req, res) {
+        try {
+            const arrivals = await ArrivalService.getAllArrivals();
+            res.json(arrivals);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
     // Get all upcoming arrivals
     static async getUpcomingArrivals(req, res) {
         try {

@@ -1,0 +1,12 @@
+.drawer .MuiDrawer-paper {
+    width: 240px;
+    box-sizing: border-box;
+  }
+  
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    justify-content: flex-end;
+  }
+  
