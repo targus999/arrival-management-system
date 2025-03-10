@@ -13,8 +13,11 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import EditIcon from '@mui/icons-material/Edit';
+import SettingsIcon from '@mui/icons-material/Settings';
 import "./TableComponent.css";
 import { styled } from '@mui/material/styles';
+import { Button } from '@mui/material';
 
 const StatusBox = styled('span')(({ status }) => ({
   display: 'inline-block',
@@ -23,6 +26,7 @@ const StatusBox = styled('span')(({ status }) => ({
   fontWeight: 'bold',
   // color: '#fff',
   background: status === 'finished' ? 'lightgreen' : status === 'upcoming' ? 'pink' : 'orange',
+  fontSize: '0.8rem',
 }));
 
 function Row({ row }) {
@@ -51,11 +55,15 @@ function Row({ row }) {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                More Info 
-              </Typography>
-              <Table size="small" aria-label="purchases">
+            <Box sx={{ margin: 3 }}>
+              {row.status === 'upcoming' && (
+                <Box sx={{ display: 'flex', gap:2, margin: 1 }}>
+                  <Button variant="contained" color="success" size="small" startIcon={<EditIcon />}>Edit</Button>
+                  <Button variant="contained" size="small" startIcon={<SettingsIcon />}>Process</Button>
+                </Box>
+              )}
+
+              <Table size="small" aria-label="purchases" >
                 <TableHead className='custom-table-head'>
                   <TableRow>
                     <TableCell></TableCell>
@@ -89,10 +97,10 @@ Row.propTypes = {
 };
 
 export default function CollapsibleTable({ data }) {
-  
+
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
+      <Table aria-label="collapsible table" size="small">
         <TableHead className='custom-table-head'>
           <TableRow>
             <TableCell />

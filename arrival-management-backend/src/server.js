@@ -8,7 +8,9 @@ app.use(express.json());
 
 // Import routes
 const arrivalsRoutes = require("./routes/arrival.route");
+const supplierRoutes = require("./routes/supplier.route");
 app.use("/arrival", arrivalsRoutes);
+app.use("/supplier", supplierRoutes);
 // app.use("/", (req, res) => {
 //   res.send("Welcome to Arrival Management API");
 // });

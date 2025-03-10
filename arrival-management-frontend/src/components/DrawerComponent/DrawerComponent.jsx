@@ -14,10 +14,12 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useTheme } from "@mui/material/styles";
 import "./DrawerComponent.css";
+import AddIcon from '@mui/icons-material/Add';
+import { Button } from "@mui/material";
 
 const drawerWidth = 240;
 
-const DrawerComponent = ({ open, handleDrawerClose }) => {
+const DrawerComponent = ({ open, handleDrawerClose, openModal }) => {
   const navigate = useNavigate(); 
   const theme = useTheme();
 
@@ -41,6 +43,9 @@ const DrawerComponent = ({ open, handleDrawerClose }) => {
       </div>
       <Divider />
       <List>
+      <ListItem>
+        <Button variant="contained" color="success" size="small" startIcon={<AddIcon />} onClick={() => openModal()}>Add Arrival</Button>
+      </ListItem>
         {["All", "Upcoming", "Finished"].map((text, index) => (<>
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={() => handleNavigate(text)}>
