@@ -1,0 +1,8 @@
+.custom-table-head {
+    background-color: lightgrey !important;
+  }
+  
+  .custom-table-head th {
+    font-weight: bold !important;
+    color: black !important;
+  }

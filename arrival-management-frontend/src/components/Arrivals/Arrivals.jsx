@@ -11,7 +11,6 @@ const Arrivals = ({ name }) => {
     const fetchData = async () => {
         try {
             const res = await axios.get(`${apiUrl}/arrival/${name.split(' ')[0].toLowerCase()}`);
-            console.log(res.data);
             setArrivals(res.data);
         } catch (error) {
             console.log(error);

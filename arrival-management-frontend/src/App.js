@@ -27,7 +27,7 @@ const App = () => {
         <CssBaseline />
         <NavBar open={openDrawer} handleDrawerOpen={toggleDrawer} />
         <DrawerComponent open={openDrawer} handleDrawerClose={toggleDrawer} openModal={openAddArrivalModal}/>
-        <AddArrivals open={openAddArrival} handleClose={() => setOpenAddArrival(false)} />
+        {openAddArrival &&<AddArrivals handleClose={() => setOpenAddArrival(false)} />}
         <div className="main-content">
           <Container>
             {/* Routes define which component to render based on the path */}

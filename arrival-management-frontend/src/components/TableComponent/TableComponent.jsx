@@ -1,3 +1,4 @@
+// TableComponent.js
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -9,30 +10,24 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import EditIcon from '@mui/icons-material/Edit';
-import SettingsIcon from '@mui/icons-material/Settings';
-import "./TableComponent.css";
-import { styled } from '@mui/material/styles';
-import { Button } from '@mui/material';
-
-const StatusBox = styled('span')(({ status }) => ({
-  display: 'inline-block',
-  padding: '4px 10px',
-  borderRadius: '12px',
-  fontWeight: 'bold',
-  // color: '#fff',
-  background: status === 'finished' ? 'lightgreen' : status === 'upcoming' ? 'pink' : 'orange',
-  fontSize: '0.8rem',
-}));
+import InnerTableComponent from '../InnerTableComponent/InnerTableComponent';
+import { styled } from '@mui/material';
 
 function Row({ row }) {
   const [open, setOpen] = React.useState(false);
 
-  const formatValue = (value) => (value === null || value === undefined ? '-' : value);
+  const StatusBox = styled('span')(({ status }) => ({
+    display: 'inline-block',
+    padding: '4px 10px',
+    borderRadius: '12px',
+    fontWeight: 'bold',
+    // color: '#fff',
+    background: status === 'finished' ? 'lightgreen' : status === 'upcoming' ? 'pink' : 'orange',
+    fontSize: '0.8rem',
+  }));
 
   return (
     <>
@@ -42,49 +37,18 @@ function Row({ row }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>{formatValue(row.arrival_number)}</TableCell>
-        <TableCell>{formatValue(row.title)}</TableCell>
-        <TableCell>
-          <StatusBox status={row.status}>{formatValue(row.status)}</StatusBox>
-        </TableCell>
-        <TableCell>{formatValue(row.expected_arrival_date)}</TableCell>
-        <TableCell>{formatValue(row.supplier?.name)}</TableCell>
-        <TableCell>{formatValue(row.total_pieces)}</TableCell>
-        <TableCell>{formatValue(row.total_weight)}</TableCell>
+        <TableCell>{row.arrival_number || '-'}</TableCell>
+        <TableCell>{row.title || '-'}</TableCell>
+        <TableCell><StatusBox status={row.status}>{row.status}</StatusBox></TableCell>
+        <TableCell>{row.expected_arrival_date || '-'}</TableCell>
+        <TableCell>{row.supplier?.name || '-'}</TableCell>
+        <TableCell>{row.total_pieces || '-'}</TableCell>
+        <TableCell>{row.total_weight || '-'}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 3 }}>
-              {row.status === 'upcoming' && (
-                <Box sx={{ display: 'flex', gap:2, margin: 1 }}>
-                  <Button variant="contained" color="success" size="small" startIcon={<EditIcon />}>Edit</Button>
-                  <Button variant="contained" size="small" startIcon={<SettingsIcon />}>Process</Button>
-                </Box>
-              )}
-
-              <Table size="small" aria-label="purchases" >
-                <TableHead className='custom-table-head'>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell>Pallets</TableCell>
-                    <TableCell>Boxes</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>Expected</TableCell>
-                    <TableCell>{formatValue(row.total_pallets)}</TableCell>
-                    <TableCell>{formatValue(row.total_boxes)}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Received</TableCell>
-                    <TableCell>{formatValue(row.actual_received_pallets)}</TableCell>
-                    <TableCell>{formatValue(row.actual_received_boxes)}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Box>
+            <InnerTableComponent row={row} />
           </Collapse>
         </TableCell>
       </TableRow>
@@ -96,8 +60,7 @@ Row.propTypes = {
   row: PropTypes.object.isRequired,
 };
 
-export default function CollapsibleTable({ data }) {
-
+export default function TableComponent({ data }) {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table" size="small">

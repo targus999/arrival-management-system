@@ -23,10 +23,10 @@ const DrawerComponent = ({ open, handleDrawerClose, openModal }) => {
   const navigate = useNavigate(); 
   const theme = useTheme();
 
-  const handleNavigate = (path) => {
-    console.log(path);
-    if(path === "All") {navigate("/");}
-    else navigate(`/${path.toLowerCase()}`)
+  const handleNavigate = (text) => {
+    const path=text.split(" ")[0].toLowerCase();
+    if(path === "all") {navigate("/");}
+    else navigate(`/${path}`)
     handleDrawerClose();
     }
   return (
@@ -46,10 +46,9 @@ const DrawerComponent = ({ open, handleDrawerClose, openModal }) => {
       <ListItem>
         <Button variant="contained" color="success" size="small" startIcon={<AddIcon />} onClick={() => openModal()}>Add Arrival</Button>
       </ListItem>
-        {["All", "Upcoming", "Finished"].map((text, index) => (<>
+        {["All Arrivals", "Upcoming Arrivals", "Finished Arrivals"].map((text, index) => (<>
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={() => handleNavigate(text)}>
-              {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>

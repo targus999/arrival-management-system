@@ -9,8 +9,9 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import EditIcon from '@mui/icons-material/Edit';
 
-const AddArrivals = ({ handleClose }) => {
+const UpdateArrivals = ({  handleClose, id }) => {
     const navigate = useNavigate();
     const [suppliers, setSuppliers] = useState([]);
     const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ const AddArrivals = ({ handleClose }) => {
 
     const [errors, setErrors] = useState({});
 
-    const clearFormData=()=> {
+    const clearFormData = () => {
         setFormData({
             supplier_id: "",
             expected_arrival_date: "",
@@ -34,13 +35,24 @@ const AddArrivals = ({ handleClose }) => {
             total_boxes: null,
             total_pieces: null,
             total_weight: null,
-        });}
+        });
+    }
 
     useEffect(() => {
         getSuppliers();
+        getArrival();
     }, []);
 
-    
+    const getArrival = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/arrival/get/${id}`);
+            setFormData(res.data);
+            console.log(res.data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const getSuppliers = async () => {
         try {
@@ -66,9 +78,9 @@ const AddArrivals = ({ handleClose }) => {
 
     const handleSubmit = async (data) => {
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/arrival/add`, data);
-            if(res.status === 201) {
-                console.log("Arrival added successfully");
+            const res = await axios.put(`${process.env.REACT_APP_API_URL}/arrival/update/${id}`, data);
+            if (res.status === 201) {
+                console.log("Arrival Updated successfully");
             }
             navigate("/upcoming");
         } catch (error) {
@@ -89,7 +101,7 @@ const AddArrivals = ({ handleClose }) => {
     };
 
     return (
-        <Modal open={true} >
+        <Modal open={true}>
             <Box
                 sx={{
                     position: "absolute",
@@ -106,7 +118,11 @@ const AddArrivals = ({ handleClose }) => {
                     gap: 2,
                 }}
             >
-                <Typography variant="h6">Add Arrival</Typography>
+                <Typography variant="h5">
+                    
+                    <EditIcon />
+                    {formData.arrival_number}
+                    </Typography>
                 <TextField
                     select
                     label={<span>Supplier <span style={{ color: "red" }}>*</span></span>}
@@ -179,7 +195,7 @@ const AddArrivals = ({ handleClose }) => {
                 <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
                     <Button variant="outlined" onClick={onCancel}>Cancel</Button>
                     <Button variant="contained" onClick={onSubmit} color="primary">
-                    Add
+                        Update                    
                     </Button>
                 </Box>
             </Box>
@@ -187,4 +203,4 @@ const AddArrivals = ({ handleClose }) => {
     );
 };
 
-export default AddArrivals;
+export default UpdateArrivals;
