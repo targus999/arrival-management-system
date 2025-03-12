@@ -22,6 +22,24 @@ class ArrivalController {
         }
     }
 
+    static async processStarted(req, res) {
+        try {
+            const arrivals = await ArrivalService.startProcessing(req.params.id,req.body);
+            res.json(arrivals);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    static async processFinished(req, res) {
+        try {
+            const arrivals = await ArrivalService.finishProcessing(req.params.id);
+            res.json(arrivals);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
     static async getAllArrivals(req, res) {
         try {
             const arrivals = await ArrivalService.getAllArrivals();

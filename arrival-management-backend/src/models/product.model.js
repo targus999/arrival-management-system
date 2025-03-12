@@ -10,6 +10,7 @@ const Product = sequelize.define(
     barcode: { type: DataTypes.STRING },
     name: { type: DataTypes.STRING, allowNull: false },
     brand: { type: DataTypes.STRING },
+    sku: { type: DataTypes.STRING, allowNull: false},
     category: { type: DataTypes.STRING, allowNull: false },
     size: { type: DataTypes.STRING },
     color: { type: DataTypes.STRING },

@@ -12,26 +12,33 @@ import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import UpdateArrivals from '../UpdateArrivals/UpdateArrivals';
 import "./InnerTableComponent.css";
+import ProcessArrivals from '../ProcessArrivals/ProcessArrivals';
 
 export default function InnerTableComponent({ row }) {
   const [update, setUpdate] = React.useState(false);
+  const [process, setProcess] = React.useState(false);
 
-  const onClose = () => {
+  const onUpdateClose = () => {
     setUpdate(false);
+  };
+
+  const onProcessClose = () => {
+    setProcess(false);
   };
 
   return (
     <Box sx={{ margin: 3 }}>
-      {update && <UpdateArrivals handleClose={onClose} id={row.id} />}
+      {update && <UpdateArrivals handleClose={onUpdateClose} id={row.id} />}
+      {process && <ProcessArrivals handleClose={onProcessClose} id={row.id} />}
       {row.status === 'upcoming' && (
         <Box sx={{ display: 'flex', gap: 2, margin: 1 }}>
           <Button onClick={() => setUpdate(true)} variant="contained" color="success" size="small" startIcon={<EditIcon />}>Edit</Button>
-          <Button variant="contained" size="small" startIcon={<SettingsIcon />}>Process</Button>
+          <Button onClick={() => setProcess(true)} variant="contained" size="small" startIcon={<SettingsIcon />}>Process</Button>
         </Box>
       )}
       {row.status === 'processing' && (
         <Box sx={{ display: 'flex', gap: 2, margin: 1 }}>
-          <Button variant="contained" size="small" startIcon={<SettingsIcon />}>Continue Processing</Button>
+          <Button onClick={() => setProcess(true)} variant="contained" size="small" startIcon={<SettingsIcon />}>Continue Processing</Button>
         </Box>
       )}
       <Table size="small" aria-label="details">

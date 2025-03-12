@@ -18,10 +18,10 @@ const UpdateArrivals = ({  handleClose, id }) => {
         supplier_id: "",
         expected_arrival_date: "",
         title: "",
-        total_pallets: null,
-        total_boxes: null,
-        total_pieces: null,
-        total_weight: null,
+        total_pallets: '',
+        total_boxes: '',
+        total_pieces: '',
+        total_weight: '',
     });
 
     const [errors, setErrors] = useState({});
@@ -31,10 +31,10 @@ const UpdateArrivals = ({  handleClose, id }) => {
             supplier_id: "",
             expected_arrival_date: "",
             title: "",
-            total_pallets: null,
-            total_boxes: null,
-            total_pieces: null,
-            total_weight: null,
+            total_pallets: '',
+            total_boxes: '',
+            total_pieces: '',
+            total_weight: '',
         });
     }
 

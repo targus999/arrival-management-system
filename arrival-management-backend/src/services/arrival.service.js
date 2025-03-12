@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Supplier, Arrival } = require('../models');
 
 class ArrivalService {
@@ -37,6 +38,30 @@ class ArrivalService {
 
         return newArrival;
     }
+
+    static async startProcessing(id,data) {    
+        const{pallets, boxes} = data;
+        console.log('Processing started: ', id);
+        const arrival = await Arrival.findByPk(id);
+        if (!arrival) {
+            return res.status(404).json({ message: 'Arrival not found' });
+        }
+
+        await arrival.update({actual_received_pallets:parseInt(pallets), actual_received_boxes:parseInt(boxes), status: 'processing'});
+        return arrival;
+    }
+
+    static async finishProcessing(id) {    
+        console.log('Processing finished: ', id);
+        const arrival = await Arrival.findByPk(id);
+        if (!arrival) {
+            return res.status(404).json({ message: 'Arrival not found' });
+        }
+
+        await arrival.update({ status: 'finished'});
+        return arrival;
+    }
+
     static async getAllArrivals() {
         return await Arrival.findAll({
             include: [{ model: Supplier, attributes: ['name'] }],
@@ -45,7 +70,7 @@ class ArrivalService {
     }
     static async getUpcomingArrivals() {
         return await Arrival.findAll({
-            where: { status: 'upcoming' },
+            where: { status: { [Op.or]: ['upcoming', 'processing'] } },
             include: [{ model: Supplier, attributes: ['name'] }],
             order: [['expected_arrival_date', 'ASC']]
         });

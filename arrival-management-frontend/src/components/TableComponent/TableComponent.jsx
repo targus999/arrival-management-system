@@ -14,20 +14,12 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import InnerTableComponent from '../InnerTableComponent/InnerTableComponent';
-import { styled } from '@mui/material';
+import { Chip, styled } from '@mui/material';
 
 function Row({ row }) {
   const [open, setOpen] = React.useState(false);
 
-  const StatusBox = styled('span')(({ status }) => ({
-    display: 'inline-block',
-    padding: '4px 10px',
-    borderRadius: '12px',
-    fontWeight: 'bold',
-    // color: '#fff',
-    background: status === 'finished' ? 'lightgreen' : status === 'upcoming' ? 'pink' : 'orange',
-    fontSize: '0.8rem',
-  }));
+  
 
   return (
     <>
@@ -39,7 +31,7 @@ function Row({ row }) {
         </TableCell>
         <TableCell>{row.arrival_number || '-'}</TableCell>
         <TableCell>{row.title || '-'}</TableCell>
-        <TableCell><StatusBox status={row.status}>{row.status}</StatusBox></TableCell>
+        <TableCell><Chip label={row.status} color={row.status=='finished'?'error':row.status=='processing'?'warning':'success'} /></TableCell>
         <TableCell>{row.expected_arrival_date || '-'}</TableCell>
         <TableCell>{row.supplier?.name || '-'}</TableCell>
         <TableCell>{row.total_pieces || '-'}</TableCell>
