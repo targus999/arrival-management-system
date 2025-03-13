@@ -8,6 +8,8 @@ import DrawerComponent from "./components/DrawerComponent/DrawerComponent";
 import "./styles.css";
 import Arrivals from "./components/Arrivals/Arrivals";
 import AddArrivals from "./components/AddArrivals/AddArrivals";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const App = () => {
@@ -23,6 +25,7 @@ const App = () => {
 
   return (
     <Router>
+      <ToastContainer position="top-center" autoClose={3000} />
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <NavBar open={openDrawer} handleDrawerOpen={toggleDrawer} />

@@ -55,7 +55,7 @@ class ProductService {
     static async addProductWithNewSKU(productData) {
         try {
             delete productData.id;// Deletes the id field
-            const newSKU = `${productData.brand}-${productData.name}-${productData.category}-${productData.color}-${productData.size}-${productData.style}`;
+            const newSKU = `${productData.brand||'NA'}-${productData.name||'NA'}-${productData.category}-${productData.color||'NA'}-${productData.size||'NA'}-${productData.style||'NA'}`.replace(/\s/g, '-').toUpperCase();
             productData.sku = newSKU;
             return await ProductService.addProduct(productData);
         } catch (error) {

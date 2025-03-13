@@ -69,9 +69,13 @@ export default function TableComponent({ data }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {data.length?data.map((row) => (
             <Row key={row.id} row={row} />
-          ))}
+          )):(
+            <TableRow>
+                <TableCell colSpan={8} align="center">no Arrivals found</TableCell>
+            </TableRow>
+        )}
         </TableBody>
       </Table>
     </TableContainer>

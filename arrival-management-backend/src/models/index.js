@@ -2,9 +2,8 @@ const sequelize = require("../config/database");
 const Supplier = require("./supplier.model");
 const Arrival = require("./arrival.model");
 const Product = require("./product.model");
-const ArrivalLog = require("./arrivalLog.model");
 
-const db = { sequelize, Supplier, Arrival, Product, ArrivalLog };
+const db = { sequelize, Supplier, Arrival, Product};
 
 // Sync models with database
 (async () => {

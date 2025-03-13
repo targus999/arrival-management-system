@@ -41,19 +41,20 @@ const DrawerComponent = ({ open, handleDrawerClose, openModal }) => {
           {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>
       </div>
-      <Divider />
       <List>
       <ListItem>
         <Button variant="contained" color="success" size="small" startIcon={<AddIcon />} onClick={() => openModal()}>Add Arrival</Button>
       </ListItem>
-        {["All Arrivals", "Upcoming Arrivals", "Finished Arrivals"].map((text, index) => (<>
+      <Divider />
+        {["All Arrivals", "Upcoming Arrivals", "Finished Arrivals"].map((text, index) => (
+          <React.Fragment key={text}>
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={() => handleNavigate(text)}>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
           <Divider />
-          </>
+          </React.Fragment>
         ))}
       </List>
     </Drawer>

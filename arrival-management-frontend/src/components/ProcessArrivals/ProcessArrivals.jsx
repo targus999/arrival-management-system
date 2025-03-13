@@ -4,8 +4,9 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UpdateReceivedQuantity from '../UpdateReceivedQuantity/UpdateReceivedQuantity';
 import AddProducts from '../AddProducts/AddProducts';
+import ProductSummary from '../ProductSummary/ProductSummary';
 
-const steps = ['Update Received Quantity', 'Add Products'];
+const steps = ['Update Received Quantity', 'Add Products', 'Arrival Summary'];
 
 const ProcessArrivals = ({ handleClose, id }) => {
     const location = useLocation();
@@ -13,7 +14,7 @@ const ProcessArrivals = ({ handleClose, id }) => {
     const [activeStep, setActiveStep] = useState(0);
     
     const handleNext = () => {
-        setActiveStep(1);
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
     const handleCancel = () => {
@@ -32,13 +33,15 @@ const ProcessArrivals = ({ handleClose, id }) => {
                     ))}
                 </Stepper>
                 <div>
-                    <Divider sx={{paddingTop:'3%',marginBottom:'3%'}}/>
+                    <Divider sx={{paddingTop:'2%',marginBottom:'2%'}}/>
                     <div>
                         
                         {activeStep == 0 ? 
                         <UpdateReceivedQuantity id={id} handleNext={handleNext} handleCancel={handleCancel}/>
+                        : activeStep == 1 ?
+                        <AddProducts id={id} handleNext={handleNext} handleCancel={handleCancel}/>
                         :
-                        <AddProducts id={id} handleCancel={handleClose}/> 
+                        <ProductSummary id={id} handleCancel={handleClose}/>
                         }
 
 

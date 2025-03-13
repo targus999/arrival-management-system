@@ -10,6 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import EditIcon from '@mui/icons-material/Edit';
+import { toast } from "react-toastify";
 
 const UpdateArrivals = ({  handleClose, id }) => {
     const navigate = useNavigate();
@@ -46,6 +47,11 @@ const UpdateArrivals = ({  handleClose, id }) => {
     const getArrival = async () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/arrival/get/${id}`);
+            if(res.status !== 200) {
+                console.log('Error fetching arrival details');
+                toast.error('Error fetching arrival details');
+                return;
+            }
             setFormData(res.data);
             console.log(res.data);
 
@@ -79,8 +85,11 @@ const UpdateArrivals = ({  handleClose, id }) => {
     const handleSubmit = async (data) => {
         try {
             const res = await axios.put(`${process.env.REACT_APP_API_URL}/arrival/update/${id}`, data);
-            if (res.status === 201) {
+            if (res.status === 200) {
+                toast.success("Arrival Updated successfully");
                 console.log("Arrival Updated successfully");
+            }else{
+                toast.error("Error updating arrival");
             }
             navigate("/upcoming");
         } catch (error) {

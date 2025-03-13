@@ -21,7 +21,7 @@ class ProductController {
         }
     }
     static async addProduct(req, res) {
-        if(req.body.barcode){
+        if(req.body.barcode){ 
             ProductController.addProductWithBarcode(req, res);
         }else{
             ProductController.addProductWithoutBarcode(req, res);
@@ -37,7 +37,8 @@ class ProductController {
                     const product = await ProductService.updateProduct(barcodeExists);
                     res.status(201).json(product);
                 }else{
-                    req.body.sku = barcodeExists.SKU;
+                    req.body.sku = barcodeExists.sku;
+                    delete req.body.barcode;
                     const product = await ProductService.addProduct(req.body);
                     res.status(201).json(product);
                 }

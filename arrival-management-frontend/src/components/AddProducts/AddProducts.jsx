@@ -1,10 +1,11 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from '@mui/material';
 import axios from 'axios';
+import { toast } from "react-toastify";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 
-const AddProducts = ({ id, handleCancel }) => {
+const AddProducts = ({ id, handleNext, handleCancel }) => {
     const navigate = useNavigate();
     const [barcode, setBarcode] = useState('');
     const [openDialog, setOpenDialog] = useState(false); // For confirmation dialog
@@ -58,9 +59,15 @@ const AddProducts = ({ id, handleCancel }) => {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/barcode/${barcode}`);
             console.log('RES: ', res.data);
             if (res.data) {
+                toast.success("Product found with barcode");
                 delete res.data.quantity;
                 delete res.data.condition;
+                delete res.data.id;
+                res.data.arrival_id = id;
                 setProductData(res.data);
+            }
+            else{
+                toast.error("Product not found with barcode");
             }
         } catch (error) {
             console.error("Error validating barcode:", error);
@@ -91,27 +98,21 @@ const AddProducts = ({ id, handleCancel }) => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/product/add`, productData);
             if (res.status === 201) {
+                toast.success("Product added successfully");
                 clearFields();
+            }
+            else{
+                toast.error("Error adding product");
             }
         } catch (error) {
             console.error("Error adding product:", error);
         }
     };
-    const processFinished = async () => {
-        try {
-            const res = await axios.patch(`${process.env.REACT_APP_API_URL}/arrival/process-finished/${id}`);
-            if (res.status === 200) {
-                handleCancel();
-                navigate('/finished');
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    
     return (
         <Box>
             <FormControl component="fieldset">
-                <FormLabel component="legend">Does the product have barcode?</FormLabel>
+                <FormLabel component="legend">Search product with barcode?</FormLabel>
                 <RadioGroup row value={barcodeEntry} onChange={(e) => setBarcodeEntry(e.target.value === 'true')}>
                     <FormControlLabel value={true} control={<Radio />} label="Yes" />
                     <FormControlLabel value={false} control={<Radio />} label="No" />
@@ -204,8 +205,8 @@ const AddProducts = ({ id, handleCancel }) => {
                         </FormControl>
                     </Grid>
                     <Grid item xs={3}>
-                        <FormControl fullWidth >
-                            <InputLabel>Category </InputLabel>
+                        <FormControl fullWidth error={!!errors.category}>
+                            <InputLabel>{<span>Category <span style={{ color: "red" }}>*</span></span>}</InputLabel>
                             <Select
                                 name="category"
                                 value={productData.category}
@@ -214,6 +215,7 @@ const AddProducts = ({ id, handleCancel }) => {
                                 <MenuItem value="Apparel">Apparel</MenuItem>
                                 <MenuItem value="Footwear">Footwear</MenuItem>
                             </Select>
+                            {errors.category && <FormHelperText>{errors.category}</FormHelperText>}
                         </FormControl>
                     </Grid>
                     <Grid item xs={3}>
@@ -308,35 +310,12 @@ const AddProducts = ({ id, handleCancel }) => {
                     Cancel
                 </Button>
                 <Box sx={{ flex: '1 1 auto' }} />
-                <Button variant="outlined" onClick={() => setOpenDialog(true)}>
+                <Button variant="outlined" onClick={() => handleNext()}>
                     Finish
                 </Button>
             </Box>
 
-            {/* Confirmation Dialog */}
-            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-                <DialogTitle>Confirm Process Completion</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to finish processing this arrival?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenDialog(false)} color="inherit">
-                        No
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            setOpenDialog(false);
-                            processFinished();
-                        }}
-                        color="primary"
-                        variant="contained"
-                    >
-                        Yes
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            
         </Box>
     )
 };

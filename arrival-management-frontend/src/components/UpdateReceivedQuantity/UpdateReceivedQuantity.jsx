@@ -1,6 +1,7 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 const UpdateReceivedQuantity = ({ id, handleNext, handleCancel }) => {
     const [arrival, setArrival] = useState(0);
     const [received, setReceived] = useState({
@@ -18,7 +19,8 @@ const UpdateReceivedQuantity = ({ id, handleNext, handleCancel }) => {
     const updateReceived = async () => {
         try {
             const res = await axios.patch(`${process.env.REACT_APP_API_URL}/arrival/process-received/${id}`, received);
-            if(res.status === 200){   
+            if(res.status === 200){  
+                toast.success("Received quantity updated successfully"); 
                 handleNext();
             }
 

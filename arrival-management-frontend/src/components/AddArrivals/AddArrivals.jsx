@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddArrivals = ({ handleClose }) => {
     const navigate = useNavigate();
@@ -17,10 +18,10 @@ const AddArrivals = ({ handleClose }) => {
         supplier_id: "",
         expected_arrival_date: "",
         title: "",
-        total_pallets: null,
-        total_boxes: null,
-        total_pieces: null,
-        total_weight: null,
+        total_pallets: '',
+        total_boxes: '',
+        total_pieces: '',
+        total_weight: '',
     });
 
     const [errors, setErrors] = useState({});
@@ -30,7 +31,7 @@ const AddArrivals = ({ handleClose }) => {
             supplier_id: "",
             expected_arrival_date: "",
             title: "",
-            total_pallets: null,
+            total_pallets: '',
             total_boxes: null,
             total_pieces: null,
             total_weight: null,
@@ -68,7 +69,12 @@ const AddArrivals = ({ handleClose }) => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/arrival/add`, data);
             if(res.status === 201) {
+                toast.success("Arrival added successfully");
                 console.log("Arrival added successfully");
+            }
+            else {
+                toast.error("Failed to add arrival");
+                console.log("Failed to add arrival");
             }
             navigate("/upcoming");
         } catch (error) {
@@ -88,7 +94,8 @@ const AddArrivals = ({ handleClose }) => {
         }
     };
 
-    return (
+    return (<>
+    
         <Modal open={true} >
             <Box
                 sx={{
@@ -184,6 +191,7 @@ const AddArrivals = ({ handleClose }) => {
                 </Box>
             </Box>
         </Modal>
+        </>
     );
 };
 
