@@ -1,4 +1,4 @@
-import { Box, Button, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +7,10 @@ import SearchIcon from '@mui/icons-material/Search';
 const AddProducts = ({ id, handleCancel }) => {
     const navigate = useNavigate();
     const [barcode, setBarcode] = useState('');
+    const [openDialog, setOpenDialog] = useState(false); // For confirmation dialog
     const [barcodeEntry, setBarcodeEntry] = useState(true);
     const [productData, setProductData] = useState({
+        name: '',
         arrival_id: id,
         barcode: '',
         brand: '',
@@ -26,6 +28,7 @@ const AddProducts = ({ id, handleCancel }) => {
     const clearFields = () => {
         setBarcode('');
         setProductData({
+            name: '',
             arrival_id: id,
             barcode: '',
             brand: '',
@@ -52,11 +55,13 @@ const AddProducts = ({ id, handleCancel }) => {
         }
         setErrors({});
         try {
-
-
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/barcode/${barcode}`);
-            if (res.data) setProductData(res.data);
-            console.log('BARCODE: ', res.data);
+            console.log('RES: ', res.data);
+            if (res.data) {
+                delete res.data.quantity;
+                delete res.data.condition;
+                setProductData(res.data);
+            }
         } catch (error) {
             console.error("Error validating barcode:", error);
         }
@@ -112,41 +117,45 @@ const AddProducts = ({ id, handleCancel }) => {
                     <FormControlLabel value={false} control={<Radio />} label="No" />
                 </RadioGroup>
             </FormControl>
-            {barcodeEntry ? (<> <Typography variant='h6'>Search with Barcode</Typography>
+            {barcodeEntry ? (<>
+                <Typography variant='h6'>Search with Barcode</Typography>
                 {/*  Barcode Input Field */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Grid container direction="column" spacing={2}>
-                    <TextField
-                        label="Barcode"
-                        fullWidth
-                        margin="normal"
-                        value={barcode}
-                        onChange={(e) => setBarcode(e.target.value)}
-                        error={!!errors.barcode}
-                        helperText={errors.barcode}
-                    />
-                    <IconButton color="primary" onClick={validateBarcode}>
-                        <SearchIcon />
-                    </IconButton>
-                    {productData.barcode && <>
-                        <Typography variant="h6" sx={{ mb: 2 }}>
-                            Enter Condition and Quantity
-                        </Typography>
-                       
+                    <Grid container direction="column" spacing={2}>
+                        <TextField
+                            label="Barcode"
+                            fullWidth
+                            margin="normal"
+                            value={barcode}
+                            onChange={(e) => setBarcode(e.target.value)}
+                            error={!!errors.barcode}
+                            helperText={errors.barcode}
+                        />
+                        <IconButton color="primary" onClick={validateBarcode}>
+                            <SearchIcon />
+                        </IconButton>
+                        {productData.barcode && <>
+                            <Typography variant="h6" sx={{ mb: 2 }}>
+                                Enter Condition and Quantity
+                            </Typography>
+
                             <Grid item>
-                                <TextField
-                                    label="Condition"
-                                    fullWidth
-                                    name="condition"
-                                    value={productData.condition}
-                                    onChange={handleInputChange}
-                                    error={!!errors.condition}
-                                    helperText={errors.condition}
-                                />
+                                <FormControl fullWidth error={!!errors.condition}>
+                                    <InputLabel>{<span>Condition <span style={{ color: "red" }}>*</span></span>}</InputLabel>
+                                    <Select
+                                        name="condition"
+                                        value={productData.condition}
+                                        onChange={handleInputChange}
+                                    >
+                                        <MenuItem value="New">New</MenuItem>
+                                        <MenuItem value="Old">Old</MenuItem>
+                                    </Select>
+                                    {errors.condition && <FormHelperText>{errors.condition}</FormHelperText>}
+                                </FormControl>
                             </Grid>
                             <Grid item>
                                 <TextField
-                                    label="Quantity"
+                                    label={<span>Quantity <span style={{ color: "red" }}>*</span></span>}
                                     type="number"
                                     fullWidth
                                     name="quantity"
@@ -156,13 +165,13 @@ const AddProducts = ({ id, handleCancel }) => {
                                     helperText={errors.quantity}
                                 />
                             </Grid>
-                        
-                        <Button variant="contained" sx={{ mt: 2 }} onClick={handleSubmit}>
-                            Add Product
-                        </Button>
-                    </>}
-</Grid>
-                    
+
+                            <Button variant="contained" sx={{ mt: 2 }} onClick={handleSubmit}>
+                                Add Product
+                            </Button>
+                        </>}
+                    </Grid>
+
                 </Box>
             </>) : (<>
                 <Typography variant="h6" sx={{ mb: 2 }}>
@@ -181,44 +190,57 @@ const AddProducts = ({ id, handleCancel }) => {
                         />
                     </Grid>
                     <Grid item xs={3}>
-                        <TextField
-                            label="Brand"
-                            fullWidth
-                            name="brand"
-                            value={productData.brand}
-                            onChange={handleInputChange}
-                        />
+                        <FormControl fullWidth >
+                            <InputLabel>Brand </InputLabel>
+                            <Select
+                                name="brand"
+                                value={productData.brand}
+                                onChange={handleInputChange}
+                            >
+                                <MenuItem value="Brand-1">Brand-1</MenuItem>
+                                <MenuItem value="Brand-2">Brand-2</MenuItem>
+                                <MenuItem value="Brand-3">Brand-3</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <FormControl fullWidth >
+                            <InputLabel>Category </InputLabel>
+                            <Select
+                                name="category"
+                                value={productData.category}
+                                onChange={handleInputChange}
+                            >
+                                <MenuItem value="Apparel">Apparel</MenuItem>
+                                <MenuItem value="Footwear">Footwear</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
-                            label="Category"
+                            label="Name"
                             fullWidth
-                            name="category"
-                            value={productData.category}
-                            onChange={handleInputChange}
-                            error={!!errors.category}
-                            helperText={errors.category}
-                        />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <TextField
-                            label="Size"
-                            fullWidth
-                            name="size"
-                            value={productData.size}
+                            name="name"
+                            value={productData.name}
                             onChange={handleInputChange}
                         />
                     </Grid>
 
                     {/* Second Row */}
-                    <Grid item xs={3}>
-                        <TextField
-                            label="Color"
-                            fullWidth
-                            name="color"
-                            value={productData.color}
-                            onChange={handleInputChange}
-                        />
+                    <Grid item xs={2}>
+                        <FormControl fullWidth >
+                            <InputLabel>Color </InputLabel>
+                            <Select
+                                name="color"
+                                value={productData.color}
+                                onChange={handleInputChange}
+                            >
+                                <MenuItem value="Red">Red</MenuItem>
+                                <MenuItem value="Green">Green</MenuItem>
+                                <MenuItem value="Yellow">Yellow</MenuItem>
+                                <MenuItem value="Blue">Blue</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
@@ -229,20 +251,23 @@ const AddProducts = ({ id, handleCancel }) => {
                             onChange={handleInputChange}
                         />
                     </Grid>
-                    <Grid item xs={3}>
-                        <TextField
-                            label="Condition"
-                            fullWidth
-                            name="condition"
-                            value={productData.condition}
-                            onChange={handleInputChange}
-                            error={!!errors.condition}
-                            helperText={errors.condition}
-                        />
+                    <Grid item xs={2}>
+                        <FormControl fullWidth error={!!errors.condition}>
+                            <InputLabel>{<span>Condition <span style={{ color: "red" }}>*</span></span>}</InputLabel>
+                            <Select
+                                name="condition"
+                                value={productData.condition}
+                                onChange={handleInputChange}
+                            >
+                                <MenuItem value="New">New</MenuItem>
+                                <MenuItem value="Old">Old</MenuItem>
+                            </Select>
+                            {errors.condition && <FormHelperText>{errors.condition}</FormHelperText>}
+                        </FormControl>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                         <TextField
-                            label="Quantity"
+                            label={<span>Quantity <span style={{ color: "red" }}>*</span></span>}
                             type="number"
                             fullWidth
                             name="quantity"
@@ -251,6 +276,20 @@ const AddProducts = ({ id, handleCancel }) => {
                             error={!!errors.quantity}
                             helperText={errors.quantity}
                         />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <FormControl fullWidth >
+                            <InputLabel>size </InputLabel>
+                            <Select
+                                name="size"
+                                value={productData.size}
+                                onChange={handleInputChange}
+                            >
+                                <MenuItem value="Small">Small</MenuItem>
+                                <MenuItem value="Medium">Medium</MenuItem>
+                                <MenuItem value="Large">Large</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
                 </Grid>
 
@@ -269,10 +308,35 @@ const AddProducts = ({ id, handleCancel }) => {
                     Cancel
                 </Button>
                 <Box sx={{ flex: '1 1 auto' }} />
-                <Button variant="outlined" onClick={processFinished}>
+                <Button variant="outlined" onClick={() => setOpenDialog(true)}>
                     Finish
                 </Button>
             </Box>
+
+            {/* Confirmation Dialog */}
+            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogTitle>Confirm Process Completion</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to finish processing this arrival?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenDialog(false)} color="inherit">
+                        No
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setOpenDialog(false);
+                            processFinished();
+                        }}
+                        color="primary"
+                        variant="contained"
+                    >
+                        Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 };

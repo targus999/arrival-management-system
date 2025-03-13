@@ -56,7 +56,7 @@ const UpdateReceivedQuantity = ({ id, handleNext, handleCancel }) => {
         <>
         <Typography variant='h6'>Update Received Quantity</Typography>
             <TextField
-                label="Pallets"
+                label={<span>Pallets <span style={{ color: "red" }}>*</span></span>}
                 type="number"
                 fullWidth
                 margin="normal"
@@ -66,7 +66,7 @@ const UpdateReceivedQuantity = ({ id, handleNext, handleCancel }) => {
                 helperText={errors.pallets ? "Pallets is required" : ""}
             />
             <TextField
-                label="Boxes"
+                label={<span>Boxes <span style={{ color: "red" }}>*</span></span>}
                 type="number"
                 fullWidth
                 margin="normal"

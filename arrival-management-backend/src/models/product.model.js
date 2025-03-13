@@ -8,7 +8,7 @@ const Product = sequelize.define(
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     arrival_id: { type: DataTypes.INTEGER, references: { model: "arrivals", key: "id" }, onDelete: "CASCADE" },
     barcode: { type: DataTypes.STRING },
-    name: { type: DataTypes.STRING, allowNull: false },
+    name: { type: DataTypes.STRING},
     brand: { type: DataTypes.STRING },
     sku: { type: DataTypes.STRING, allowNull: false},
     category: { type: DataTypes.STRING, allowNull: false },
@@ -17,8 +17,6 @@ const Product = sequelize.define(
     style: { type: DataTypes.STRING },
     condition: { type: DataTypes.STRING, allowNull: false },
     quantity: { type: DataTypes.INTEGER, defaultValue: 1, validate: { min: 1 } },
-    created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-    updated_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   },
   { tableName: "products", timestamps: true, underscored: true }
 );

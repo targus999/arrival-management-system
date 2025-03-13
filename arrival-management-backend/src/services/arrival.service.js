@@ -58,7 +58,10 @@ class ArrivalService {
             return res.status(404).json({ message: 'Arrival not found' });
         }
 
-        await arrival.update({ status: 'finished'});
+        await arrival.update({ 
+            status: 'finished',
+            finished_at: new Date()
+        });
         return arrival;
     }
 

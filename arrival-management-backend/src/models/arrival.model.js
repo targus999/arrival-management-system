@@ -18,8 +18,6 @@ const Arrival = sequelize.define(
     actual_received_boxes: { type: DataTypes.INTEGER, allowNull: true, validate: { min: 0 } },
     status: { type: DataTypes.STRING, allowNull: false, defaultValue: "upcoming", validate: { isIn: [["upcoming", "processing", "finished"]] } },
     finished_at: { type: DataTypes.DATE, allowNull: true },
-    created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-    updated_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   },
   { tableName: "arrivals", timestamps: true, underscored: true }
 );
