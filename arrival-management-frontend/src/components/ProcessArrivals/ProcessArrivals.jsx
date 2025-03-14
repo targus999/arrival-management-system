@@ -13,10 +13,12 @@ const ProcessArrivals = ({ handleClose, id }) => {
     const navigate = useNavigate();
     const [activeStep, setActiveStep] = useState(0);
     
+    // Function to handle the next step
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
+    // Function to handle the previous step
     const handleCancel = () => {
         navigate(location.pathname, { replace: true });
         handleClose()

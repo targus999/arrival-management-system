@@ -26,6 +26,7 @@ const AddArrivals = ({ handleClose }) => {
 
     const [errors, setErrors] = useState({});
 
+    //a function to clear the form data
     const clearFormData=()=> {
         setFormData({
             supplier_id: "",
@@ -42,7 +43,7 @@ const AddArrivals = ({ handleClose }) => {
     }, []);
 
     
-
+    //a function to get all suppliers
     const getSuppliers = async () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/supplier`)
@@ -52,6 +53,7 @@ const AddArrivals = ({ handleClose }) => {
         }
     };
 
+    //a function to validate the form data
     const validate = () => {
         let tempErrors = {};
         if (!formData.expected_arrival_date) tempErrors.expected_arrival_date = "Expected date is required";
@@ -61,10 +63,13 @@ const AddArrivals = ({ handleClose }) => {
         return Object.keys(tempErrors).length === 0;
     };
 
+    //a function to handle the change in the form data
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+
+    //a function to handle the form submission
     const handleSubmit = async (data) => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/arrival/add`, data);
@@ -82,10 +87,13 @@ const AddArrivals = ({ handleClose }) => {
         }
     }
 
+    //a function to handle the cancel button
     const onCancel = () => {
         clearFormData();
         handleClose();
     }
+
+    //a function to handle the form submission
     const onSubmit = () => {
         if (validate()) {
             handleSubmit(formData);

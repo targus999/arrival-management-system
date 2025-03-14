@@ -1,6 +1,7 @@
 const { Product } = require('../models');
 
 class ProductService {
+
      /**
      * Adds a new product to the database.
      * @param {Object} productData - Product details to add.
@@ -35,13 +36,39 @@ class ProductService {
 
 
 
+    /**
+     * Retrieves all products associated with a specific arrival ID.
+     * @param {number} id - The arrival ID to filter products by.
+     * @returns {Promise<Array>} - An array of products that match the arrival ID.
+     */
     static async getAllProducts(id) {
         return await Product.findAll({
-            where: { arrival_id:id }, // Filters products where arrival_id matches
+            where: { arrival_id: id }, // Filters products where arrival_id matches
         });
     }
-    static async searchForProduct(filters) {
+
+
+    /**
+     * Retrieves a product by its barcode.
+     * @param {Object} filters - The filters to apply when searching for the product.
+     * @param {string} filters.barcode - The barcode of the product to find.
+     * @returns {Promise<Object|null>} A promise that resolves to the product if found, or null if not found.
+     */
+    static async getByBarcode(filters) {
         return await Product.findOne({
+            where: filters, // Filters products 
+        });
+    }
+
+
+    /**
+     * Searches for products based on the provided filters.
+     *
+     * @param {Object} filters - The filters to apply when searching for products.
+     * @returns {Array}  An array of products that match the filters.
+     */
+    static async searchForProduct(filters) {
+        return await Product.findAll({
             where: filters, // Filters products 
         });
     }

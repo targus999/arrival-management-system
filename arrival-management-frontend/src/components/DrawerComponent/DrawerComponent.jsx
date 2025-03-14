@@ -23,6 +23,7 @@ const DrawerComponent = ({ open, handleDrawerClose, openModal }) => {
   const navigate = useNavigate(); 
   const theme = useTheme();
 
+  // Function to navigate to the selected path
   const handleNavigate = (text) => {
     const path=text.split(" ")[0].toLowerCase();
     if(path === "all") {navigate("/");}

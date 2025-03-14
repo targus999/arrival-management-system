@@ -26,6 +26,7 @@ const AddProducts = ({ id, handleNext, handleCancel }) => {
 
     const [errors, setErrors] = useState({});
 
+    //  Clear fields when barcode entry is toggled
     const clearFields = () => {
         setBarcode('');
         setProductData({
@@ -57,14 +58,17 @@ const AddProducts = ({ id, handleNext, handleCancel }) => {
         setErrors({});
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/barcode/${barcode}`);
-            console.log('RES: ', res.data);
             if (res.data) {
                 toast.success("Product found with barcode");
                 delete res.data.quantity;
                 delete res.data.condition;
                 delete res.data.id;
                 res.data.arrival_id = id;
-                setProductData(res.data);
+                setProductData({
+                    ...res.data,
+                    condition: res.data.condition ?? "", // Ensure condition is always a valid value
+                    quantity: res.data.quantity ?? "",
+                });
             }
             else{
                 toast.error("Product not found with barcode");
@@ -125,7 +129,7 @@ const AddProducts = ({ id, handleNext, handleCancel }) => {
                     <Grid container direction="column" spacing={2}>
                         <TextField
                             label="Barcode"
-                            fullWidth
+                            fullWidth 
                             margin="normal"
                             value={barcode}
                             onChange={(e) => setBarcode(e.target.value)}

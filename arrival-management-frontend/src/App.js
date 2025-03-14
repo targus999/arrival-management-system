@@ -16,6 +16,8 @@ const App = () => {
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openAddArrival, setOpenAddArrival] = React.useState(false);
   const toggleDrawer = () => setOpenDrawer(!openDrawer);
+
+  // Function to open the Add Arrival modal
   const openAddArrivalModal = () => {
     setOpenAddArrival(true);
     toggleDrawer();
@@ -33,7 +35,6 @@ const App = () => {
         {openAddArrival &&<AddArrivals handleClose={() => setOpenAddArrival(false)} />}
         <div className="main-content">
           <Container>
-            {/* Routes define which component to render based on the path */}
             <Routes>
               <Route path="/" element={<Arrivals name={"All Arrivals"}/>} />
               <Route path="/upcoming" element={<Arrivals name={"Upcoming Arrivals"}/>} />

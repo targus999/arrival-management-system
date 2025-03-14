@@ -10,12 +10,14 @@ const UpdateReceivedQuantity = ({ id, handleNext, handleCancel }) => {
     });
     const [errors, setErrors] = useState({ pallets: false, boxes: false });
 
+    // Function to proceed to the next step
     const proceed = () => {
         if (validateInputs()) {
             updateReceived();
         }
     };
 
+    // Function to update the received quantity
     const updateReceived = async () => {
         try {
             const res = await axios.patch(`${process.env.REACT_APP_API_URL}/arrival/process-received/${id}`, received);
@@ -28,6 +30,8 @@ const UpdateReceivedQuantity = ({ id, handleNext, handleCancel }) => {
             console.log(error);
         }
     };
+
+    // Function to validate the inputs
     const validateInputs = () => {
         const newErrors = {
             pallets: !received.pallets || isNaN(received.pallets),
@@ -40,6 +44,8 @@ const UpdateReceivedQuantity = ({ id, handleNext, handleCancel }) => {
         getArrivalAndStep();
     }, []);
 
+
+    // Function to get the arrival details
     const getArrivalAndStep = async () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/arrival/get/${id}`);

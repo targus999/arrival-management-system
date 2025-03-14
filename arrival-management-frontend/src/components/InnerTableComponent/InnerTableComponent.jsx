@@ -18,10 +18,12 @@ export default function InnerTableComponent({ row }) {
   const [update, setUpdate] = React.useState(false);
   const [process, setProcess] = React.useState(false);
 
+  // Function to close the update dialog
   const onUpdateClose = () => {
     setUpdate(false);
   };
 
+  // Function to close the process dialog
   const onProcessClose = () => {
     setProcess(false);
   };

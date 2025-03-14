@@ -10,6 +10,7 @@ const ProductSummary = ({ id, handleCancel }) => {
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
 
+    // Function to get the arrival details
     const getArrival = async () => {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/arrival/get/${id}`);
         if(res.status !== 200) {
@@ -20,6 +21,7 @@ const ProductSummary = ({ id, handleCancel }) => {
         setArrival(res.data);
     }
 
+    // Function to get the products of the arrival
     const getProducts = async () => {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/all/${id}`);
         setProducts(res.data);
@@ -31,6 +33,7 @@ const ProductSummary = ({ id, handleCancel }) => {
         getArrival();
     }, [id]);
 
+    // Function to mark the arrival as finished
     const processFinished = async () => {
         try {
             const res = await axios.patch(`${process.env.REACT_APP_API_URL}/arrival/process-finished/${id}`);

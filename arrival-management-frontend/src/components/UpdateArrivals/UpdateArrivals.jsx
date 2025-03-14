@@ -27,6 +27,7 @@ const UpdateArrivals = ({  handleClose, id }) => {
 
     const [errors, setErrors] = useState({});
 
+    // Function to clear the form data
     const clearFormData = () => {
         setFormData({
             supplier_id: "",
@@ -44,6 +45,7 @@ const UpdateArrivals = ({  handleClose, id }) => {
         getArrival();
     }, []);
 
+    // Function to get the arrival details
     const getArrival = async () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/arrival/get/${id}`);
@@ -52,14 +54,25 @@ const UpdateArrivals = ({  handleClose, id }) => {
                 toast.error('Error fetching arrival details');
                 return;
             }
-            setFormData(res.data);
-            console.log(res.data);
+
+            //Update the state with the fetched data and also set default values if the fetched data is null
+            setFormData({
+                ...res.data,
+                supplier_id: res.data.supplier_id ?? "", 
+                expected_arrival_date: res.data.expected_arrival_date ?? "",
+                title: res.data.title ?? "",
+                total_pallets: res.data.total_pallets ?? '',
+                total_boxes: res.data.total_boxes ?? '',
+                total_pieces: res.data.total_pieces ?? '',
+                total_weight: res.data.total_weight ?? '',
+            });
 
         } catch (error) {
             console.log(error);
         }
     };
 
+    // Function to get the suppliers
     const getSuppliers = async () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/supplier`)
@@ -69,6 +82,7 @@ const UpdateArrivals = ({  handleClose, id }) => {
         }
     };
 
+    // Function to validate the form
     const validate = () => {
         let tempErrors = {};
         if (!formData.expected_arrival_date) tempErrors.expected_arrival_date = "Expected date is required";
@@ -78,10 +92,12 @@ const UpdateArrivals = ({  handleClose, id }) => {
         return Object.keys(tempErrors).length === 0;
     };
 
+    // Function to handle the form changes
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // Function to handle the form submission
     const handleSubmit = async (data) => {
         try {
             const res = await axios.put(`${process.env.REACT_APP_API_URL}/arrival/update/${id}`, data);
@@ -93,7 +109,7 @@ const UpdateArrivals = ({  handleClose, id }) => {
             }
             navigate("/upcoming");
         } catch (error) {
-            console.log(error);
+            console.log(error); 
         }
     }
 

@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import "./NavBar.css";
 
 const drawerWidth = 240;
-
+// Styling for the AppBar
 const AppBar = styled(MuiAppBar)(({ theme, open }) => ({
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,

@@ -8,6 +8,7 @@ const Arrivals = ({ name }) => {
     const [arrivals, setArrivals] = useState([]);
     const apiUrl = process.env.REACT_APP_API_URL;
 
+    //a function to fetch the arrivals
     const fetchData = async () => {
         try {
             const res = await axios.get(`${apiUrl}/arrival/${name.split(' ')[0].toLowerCase()}`);
