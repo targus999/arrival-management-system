@@ -1,0 +1,29 @@
+@startuml uml
+actor User
+participant "Arrivals Management System" as AMS
+participant "Database" as DB
+
+User -> AMS: Start Processing Arrival
+AMS -> DB: Update Status to "In Progress",Store Received Quantities
+DB --> AMS: Confirmation
+
+User -> AMS: Start Product Processing (Manual Entry)
+
+loop For Each Product
+    User -> AMS: Scan Barcode or Select "No Barcode"
+    AMS -> DB: Check if Barcode Exists
+    alt Barcode Exists
+        DB --> AMS: Retrieve Product Details
+        User -> AMS: Enter Condition and Quantity
+    else Barcode is New
+        User -> AMS: Enter Product Details (Brand, Category, etc.)
+    end
+    AMS -> DB: Save Product Data
+    DB --> AMS: Confirmation
+end
+
+User -> AMS: Finish Processing
+AMS -> DB: Update Arrival Status to "Finished" and sets timestamp
+DB --> AMS: Confirmation
+AMS -> User: Display Summary (Expected vs Received)
+@enduml
